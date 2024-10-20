@@ -1,0 +1,23 @@
+{
+  "name": "shut_the_box",
+  "collaborators": [
+    "Kaden Kilburg <kmkilburg28@gmail.com>"
+  ],
+  "description": "A sample project with wasm-pack",
+  "version": "0.1.0",
+  "license": "MIT/Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kmkilburg28/shut_the_box"
+  },
+  "files": [
+    "shut_the_box_bg.wasm",
+    "shut_the_box.js",
+    "shut_the_box.d.ts"
+  ],
+  "module": "shut_the_box.js",
+  "types": "shut_the_box.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
