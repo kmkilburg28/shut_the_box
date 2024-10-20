@@ -1,0 +1,422 @@
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Shut the Box</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+<body>
+    <script>
+            var r = document.querySelector(':root');
+
+            // Start of Selection
+            function openBox() {
+                var gameContainerOuter = document.getElementById('game-container-outer');
+                var gameContainerInner = document.getElementById('game-container-inner');
+                
+                // Remove the reverse animation classes
+                gameContainerOuter.classList.remove('slide-top-reverse');
+                gameContainerInner.classList.remove('slide-bottom-reverse');
+                
+                // Force reflow to ensure the class removal is processed
+                void gameContainerOuter.offsetWidth;
+                void gameContainerInner.offsetWidth;
+                
+                // Add the forward animation classes
+                gameContainerOuter.classList.add('slide-top');
+                gameContainerInner.classList.add('slide-bottom');
+    
+                setTimeout(function () {
+                    gameContainerOuter.style.zIndex = 0;
+                }, r.style.getPropertyValue('--animOff') === '' ? 250 : 0); // Adjust the duration to match the shuffle animation duration
+            }
+            
+            function closeBox() {
+                var gameContainerOuter = document.getElementById('game-container-outer');
+                var gameContainerInner = document.getElementById('game-container-inner');
+    
+                // Remove the forward animation classes
+                gameContainerOuter.classList.remove('slide-top');
+                gameContainerInner.classList.remove('slide-bottom');
+    
+                // Force reflow to ensure the class removal is processed
+                void gameContainerOuter.offsetWidth;
+                void gameContainerInner.offsetWidth;
+    
+                // Add the reverse animation classes
+                gameContainerOuter.classList.add('slide-top-reverse');
+                gameContainerInner.classList.add('slide-bottom-reverse');
+    
+                setTimeout(function () {
+                    gameContainerOuter.style.zIndex = "";
+                }, r.style.getPropertyValue('--animOff') === '' ? 250 : 0); // Adjust the duration to match the shuffle animation duration
+            }
+
+            function toggleSuggestions(event) {
+                let toggleSwitch = event.target;
+                if (toggleSwitch.checked) {
+                    console.log("Suggestions enabled");
+                } else {
+                    console.log("Suggestions disabled");
+                }
+            }
+
+            function toggleAnimations(event) {
+                let toggleSwitch = event.target;
+                if (toggleSwitch.checked) {
+                    r.style.setProperty('--animOff', '');
+                    console.log("Animations enabled");
+                } else {
+                    r.style.setProperty('--animOff', '0s');
+                    console.log("Animations disabled");
+                }
+            }
+
+            function setActiveLayer(newActiveLayerId) {
+                var activeLayer = document.querySelector('.active-layer');
+                var newLayer = document.getElementById(newActiveLayerId);
+                if (activeLayer) {
+                    activeLayer.classList.remove('active-layer');
+                }
+                newLayer.classList.add('active-layer');
+            }
+    </script>
+    <section>
+        <div class="game-container">
+            <div class="overlay game-container-outer" id="game-container-outer">
+                <div class="container">
+                    <div class="row justify-content-between align-items-center flex-nowrap">
+                        <div class="col-auto d-flex justify-content-start flex-shrink-0">
+                            <button class="btn btn-secondary me-2" onclick="closeBox()">&#8617;</button>
+                            <button class="btn btn-secondary" id="reset">&#x21BB;</button>
+                        </div>
+                        <div class="col text-center">
+                            <h1 class="text-nowrap">Shut the Box</h1>
+                        </div>
+                        <div class="col-auto d-flex justify-content-end flex-shrink-0">
+                            <div class="form-check form-switch me-2">
+                                <input class="form-check-input" type="checkbox" id="toggleSwitchSugg" onclick="toggleSuggestions(event)">
+                                <label class="form-check-label" for="toggleSwitchSugg">Suggestions</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="toggleSwitchAnim" onclick="toggleAnimations(event)" checked>
+                                <label class="form-check-label" for="toggleSwitchAnim">Animations</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column align-items-center justify-content-center gap-3 w-100 position-absolute">
+                    <button class="start" onclick="setActiveLayer('layer-game'); openBox()">Start</button>
+                    <button class="start" onclick="setActiveLayer('layer-options'); openBox()">Options</button>
+                </div>
+            </div>
+            <div class="game-container-inner" id="game-container-inner">
+                <div class="fog-overlay"></div>
+                <div class="layers">
+                    <div id="layer-options" class="overlay">
+                        <div class="overlay row mx-0"  style="overflow-y: auto;">
+                            <div class="row justify-content-center my-2">
+                                <div class="col-md-4">
+                                    <div class="row my-1">
+                                        <div class="col-md-6">
+                                            <label for="dieCount" class="form-label text-end d-block">Die Count</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="number" class="form-control" id="dieCount" name="dieCount" min="1" max="99" value="2">
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-md-6">
+                                            <label for="dieSize" class="form-label text-end d-block">Die Size</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="number" class="form-control" id="dieSize" name="dieSize" min="1" max="99" value="6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row my-1">
+                                        <div class="col-md-6">
+                                            <label for="gameSize" class="form-label text-end d-block">Game Size</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="number" class="form-control" id="gameSize" name="gameSize" min="1" max="99" value="10">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="layer-game">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="tiles-container" id="tiles-container">
+                            <!-- Tiles will be dynamically generated using JavaScript -->
+                            </div>
+                        </div>
+                        <div class="row board-container">
+                            <div class="board-center">
+                                <div class="roll-area-container" id="roll-area-container">
+                                    <div class="dice-container" id="dice-container">
+                                        <!-- Tiles will be dynamically generated using JavaScript -->
+                                    </div>
+                                    <div class="roll-info-container" id="roll-info-container">
+                                        <h2 class="roll-info" id="roll-info"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-info">
+                                <!-- <h2>Game Info</h2> -->
+                                <p>Score: <span id="score">0</span></p>
+                                <p>Predicted: <span id="predictedScore">0</span></p>
+                                <p>Remaining Dice Sum: <span id="remaining-dice-sum"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <script type="module">
+                import init, { run } from "./pkg/shut_the_box.js";
+                await init();
+
+                const diceContainer = document.getElementById("dice-container");
+                const dieCountInput = document.getElementById("dieCount");
+                const dieSizeInput = document.getElementById("dieSize");
+                const rollAreaContainer = document.getElementById("roll-area-container");
+                const rollInfoContainer = document.getElementById("roll-info-container");
+                const rollInfo = document.getElementById("roll-info");
+                function viewRollInfo(visible) {
+                    if (visible) {
+                        rollAreaContainer.style.cursor = "";
+                        rollInfoContainer.classList.remove("disabled");
+                    }
+                    else {
+                        rollAreaContainer.style.cursor = "default";
+                        rollInfoContainer.classList.add("disabled");
+                    }
+                }
+                
+                function setupDice() {
+                    const dieCount = parseInt(dieCountInput.value);
+
+                    let dice = [];
+                    for (let dieInd = 0; dieInd < dieCount; dieInd++) {
+                        let die = document.createElement('div');
+                        die.classList.add('die');
+                        
+                        for (let dotInd = 0; dotInd < 9; dotInd++) {
+                            let dot = document.createElement('div');
+                            dot.classList.add('dot');
+                            die.appendChild(dot);
+                        }
+                        dice.push(die);
+                    }
+                    const dieSize = parseInt(dieSizeInput.value);
+                    for (let die of dice) {
+                        die.dataset.value = Math.floor(Math.random() * dieSize) + 1;
+                    }
+                    diceContainer.replaceChildren(...dice);
+                    viewRollInfo(true);
+                    rollInfo.textContent = "Roll Dice";
+
+                    rollAreaContainer.onclick = rollDice;
+                }
+
+                var r = document.querySelector(':root');
+                function newDiceRoll() {
+                    const dieSize = parseInt(dieSizeInput.value);
+                    for (let die of diceContainer.children) {
+                        die.dataset.value = Math.floor(Math.random() * dieSize) + 1;
+                    }
+                }
+                function rollDice() {
+                    let remainingSumDom = document.getElementById("remaining-dice-sum");
+                    if (parseInt(remainingSumDom.textContent) > 0) {
+                        return;
+                    }
+                    const gameboard = document.getElementById("tiles-container");
+                    for (let tile of gameboard.children) {
+                        if (tile.classList.contains("pressed")) {
+                            tile.classList.add("locked");
+                        }
+                    }
+                    viewRollInfo(false);
+                    updatePredictedScore();
+
+                    let dice = diceContainer.children;
+                    if (r.style.getPropertyValue('--animOff') === '') {
+                        for (let die of dice) {
+                            die.classList.add('rolling');
+                        }
+
+                        let rollCount = 0;
+                        const rollInterval = setInterval(() => {
+                            newDiceRoll();
+                            rollCount++;
+                            
+                            if (rollCount >= 10) {
+                                clearInterval(rollInterval);
+                                for (let die of dice) {
+                                    die.classList.remove('rolling');
+                                }
+                                calculateRolledDice();
+                            }
+                        }, 100);
+                    }
+                    else {
+                        newDiceRoll();
+                        calculateRolledDice();
+                    }
+                }
+                function calculateRolledDice() {
+                    const remainingSumDom = document.getElementById("remaining-dice-sum");
+                    if (parseInt(remainingSumDom.textContent) > 0) {
+                        return;
+                    }
+
+                    let dieResults = [];
+                    let resultTotal = 0;
+                    for (let die of diceContainer.children) {
+                        const dieValue = parseInt(die.dataset.value);
+                        dieResults.push(dieValue);
+                        resultTotal += dieValue;
+                    }
+
+                    // const rollResultDiv = document.getElementById("rolled-dice");
+                    // rollResultDiv.textContent = dieResults.join(" + ") + " = " + resultTotal;
+                    remainingSumDom.textContent = resultTotal;
+
+                }
+        
+                function getGamestate() {
+                    let gamestateStr = "";
+                    let gameboard = document.getElementById("tiles-container");
+                    for (let tile of gameboard.children) {
+                        gamestateStr = (tile.classList.contains("unpressed") ? "1" : "0") + gamestateStr;
+                    }
+                    return parseInt(gamestateStr, 2);
+                }
+                function updatePredictedScore() {
+                    let dieCountInput = document.getElementById("dieCount");
+                    let dieSizeInput = document.getElementById("dieSize");
+                    let gameSizeInput = document.getElementById("gameSize");
+                    let dieCount = parseInt(dieCountInput.value);
+                    let dieSize = parseInt(dieSizeInput.value);
+                    let gameSize = parseInt(gameSizeInput.value);
+                    let stateProbs = run(dieCount,dieSize,gameSize);
+                    let gamestate = getGamestate();
+                    console.log(gamestate, stateProbs[gamestate]);
+                    document.getElementById("predictedScore").textContent = stateProbs[gamestate];
+                }
+
+                function calculateScore() {
+                    let gameboard = document.getElementById("tiles-container");
+                    let score = 0;
+                    for (let tile of gameboard.children) {
+                        if (tile.classList.contains("unpressed")) {
+                            score += parseInt(tile.textContent);
+                        }
+                    }
+                    return score;
+                }
+                function clickTile(tileDom) {
+                    if (tileDom.classList.contains("locked")) {
+                        return;
+                    }
+                    let remainingSumDiv = document.getElementById("remaining-dice-sum");
+                    let remainingSum = parseInt(remainingSumDiv.textContent);
+                    let tileValue = parseInt(tileDom.textContent);
+                    if (tileDom.classList.contains("pressed")) {
+                        remainingSumDiv.textContent = remainingSum + tileValue;
+                        tileDom.classList.remove("pressed");
+                        tileDom.classList.add("unpressed");
+                        document.getElementById("score").textContent = calculateScore();
+                        viewRollInfo(false);
+                        return;
+                    }
+
+                    let nextRemainingSum = remainingSum - tileValue;
+                    if (tileDom.classList.contains("unpressed") && 0 <= nextRemainingSum) {
+                        remainingSumDiv.textContent = nextRemainingSum;
+                        tileDom.classList.remove("unpressed");
+                        tileDom.classList.add("pressed");
+                        const score = calculateScore();
+                        document.getElementById("score").textContent = score;
+                        if (nextRemainingSum === 0) {
+                            viewRollInfo(true);
+                            if (score === 0) {
+                                win();
+                            }
+                        }
+                    }
+                }
+                function win() {
+                    viewRollInfo(true);
+                    rollInfo.textContent = "You Win!";
+                    rollAreaContainer.onclick = undefined;
+
+                }
+                function resetBoard() {
+                    document.getElementById("remaining-dice-sum").textContent = "0";
+                    let parent = document.getElementById("tiles-container");
+                    console.log(parent);
+                    parent.replaceChildren([]);
+                    let gameSizeInput = document.getElementById("gameSize");
+                    let gameSize = parseInt(gameSizeInput.value);
+                    for (let i = 1; i <= gameSize; i++) {
+                        // let col = document.createElement('div');
+                        // col.classList.add("col-1");
+                        let tile = document.createElement('button');
+                        tile.classList.add("tile");
+                        tile.classList.add("unpressed");
+                        tile.style.border = "1px solid black";
+                        tile.textContent = i;
+                        tile.onclick = (e) => {
+                            clickTile(e.target);
+                        }
+                        tile.id = "tile" + i;
+                        // col.appendChild(tile);
+                        parent.appendChild(tile);
+                    }
+                    document.getElementById("score").textContent = calculateScore();
+                    // document.getElementById("rolled-dice").textContent = "0";
+                    updatePredictedScore();
+
+                    setupDice();
+                }
+                resetBoard();
+                document.getElementById("reset").onclick = resetBoard;
+
+
+                function getRandomInt(max) {
+                    return Math.floor(Math.random() * max);
+                }
+                document.getElementById("gameSize").onchange = resetBoard;
+                dieCountInput.onchange = resetBoard;
+                dieSizeInput.onchange = resetBoard;
+
+                function setTileKeyPresses(e) {
+                    console.log(e);
+                    let keyStr = e.key;
+                    if (!isNaN(parseInt(keyStr))) {
+                        if (keyStr === "0") {
+                            keyStr = "10";
+                        }
+                        let tileDom = document.getElementById("tile" + keyStr);
+                        if (tileDom) {
+                            clickTile(tileDom);
+                        }
+                    }
+                    else if (keyStr === "Enter") {
+                        rollDice();
+                    }
+                    else if (keyStr === "Escape") {
+                        resetBoard();
+                    }
+                }
+                document.onkeydown = setTileKeyPresses;
+            </script>
+    </section>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>

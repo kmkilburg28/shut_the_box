@@ -1,0 +1,17 @@
+[package]
+name = "shut_the_box"
+version = "0.1.0"
+authors = ["Kaden Kilburg <kmkilburg28@gmail.com>"]
+description = "A sample project with wasm-pack"
+license = "MIT/Apache-2.0"
+repository = "https://github.com/kmkilburg28/shut_the_box"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+# new material
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
